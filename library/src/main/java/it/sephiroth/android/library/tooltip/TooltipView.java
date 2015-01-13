@@ -1,5 +1,7 @@
 package it.sephiroth.android.library.tooltip;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -14,11 +16,6 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.Window;
 import android.widget.TextView;
-
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.ObjectAnimator;
-import com.nineoldandroids.view.ViewHelper;
-import com.nineoldandroids.view.animation.AnimatorProxy;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -253,7 +250,7 @@ class TooltipView extends ViewGroup implements Tooltip {
 		mShowing = false;
 
 		if (fadeDuration > 0) {
-			float alpha = ViewHelper.getAlpha(this);
+			float alpha = getAlpha();
 			mShowAnimation = ObjectAnimator.ofFloat(this, "alpha", alpha, 0);
 			mShowAnimation.setDuration(fadeDuration);
 			mShowAnimation.addListener(
@@ -595,8 +592,8 @@ class TooltipView extends ViewGroup implements Tooltip {
 
 		// translate the textview
 
-		ViewHelper.setTranslationX(mView, drawRect.left);
-		ViewHelper.setTranslationY(mView, drawRect.top);
+		setTranslationX(drawRect.left);
+		setTranslationY(drawRect.top);
 
 		if (null != mDrawable) {
 			// get the global rect for the textview
@@ -604,14 +601,6 @@ class TooltipView extends ViewGroup implements Tooltip {
 
 			point.x -= tempRect.left;
 			point.y -= tempRect.top;
-
-			// View.getGlobalVisibleRect doesn't take into account
-			// translationX and translationY if applied using the ViewHelper
-			// on api < 11
-			if (AnimatorProxy.NEEDS_PROXY) {
-				point.x -= drawRect.left;
-				point.y -= drawRect.top;
-			}
 
 			if (! hideArrow) {
 				if (gravity == Gravity.LEFT || gravity == Gravity.RIGHT) {
@@ -632,18 +621,18 @@ class TooltipView extends ViewGroup implements Tooltip {
 
 	@Override
 	public void setOffsetX(int x) {
-		ViewHelper.setTranslationX(this, x - viewRect.left);
+		setTranslationX(x - viewRect.left);
 	}
 
 	@Override
 	public void setOffsetY(int y) {
-		ViewHelper.setTranslationY(this, y - viewRect.top);
+		setTranslationY(y - viewRect.top);
 	}
 
 	@Override
 	public void offsetTo(final int x, final int y) {
-		ViewHelper.setTranslationX(this, x - viewRect.left);
-		ViewHelper.setTranslationY(this, y - viewRect.top);
+		setTranslationX(x - viewRect.left);
+		setTranslationY(y - viewRect.top);
 	}
 
 	@Override
